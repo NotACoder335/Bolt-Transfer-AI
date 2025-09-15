@@ -42,7 +42,7 @@ Each line in `transfer_log.jsonl` is a JSON object like:
 ```json
 {
    "timestamp": "2025-09-15T08:22:11.123Z",
-   "type": "send",             // or "receive"
+   "type": "send",             
    "filename": "example.pdf",
    "size": 1048576,
    "status": "completed",
