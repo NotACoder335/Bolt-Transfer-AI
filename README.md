@@ -145,8 +145,7 @@ transfer_log.jsonl# (Generated) history log (JSON Lines)
 
 ---
 
-## 🖼 Screenshots (Placeholders)
-> Replace these with real captures after publishing.
+## 🖼 Screenshots 
 
 | Main Window | Send Flow (QR) | Chatbot |
 |-------------|----------------|---------|
@@ -156,10 +155,6 @@ transfer_log.jsonl# (Generated) history log (JSON Lines)
 |----------------------|-------------|--------------------|
 | ![Mobile Page](assets/screenshots/Send-Window.png) | ![Receive Mode](assets/screenshots/Receive%20Window.png) | ![Settings](assets/screenshots/settings%20window.png) |
 
-Screenshot notes:
-1. If these files don't exist yet, create them by capturing screens and saving into `assets/screenshots/`.
-2. Recommended naming already reflected above.
-3. Git will ignore nothing by default—be sure to add the images before committing.
 
 
 
