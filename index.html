@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Bolt Transfer - Lightning Fast File Sharing</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1e1e2e;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            transition: background-color 0.5s ease;
+        }
+        
+        .container {
+            text-align: center;
+            width: 400px;
+        }
+
+        h2 {
+            font-size: 36px;
+            font-weight: bold;
+            color: #ecf805;
+        }
+        
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+        }
+        
+        .view {
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+        
+        .hidden {
+            display: none;
+            opacity: 0;
+        }
+        
+        .btn {
+            background-color: #8865ff;
+            color: white;
+            border: none;
+            padding: 15px 0;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .btn:hover {
+            background-color: #7755ee;
+            transform: scale(1.02);
+        }
+        
+        .btn:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-primary {
+            background-color: #ff5599;
+        }
+        
+        .btn-primary:hover {
+            background-color: #ee4488;
+        }
+        
+        .connection-info {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .progress-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .progress-text {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .progress-subtext {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .progress-percentage {
+            font-size: 40px;
+            font-weight: bold;
+            color: #8865ff;
+            margin: 15px 0;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #8865ff;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .back-button {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 20px;
+            text-decoration: underline;
+            padding: 5px;
+        }
+        
+        .back-button:hover {
+            color: white;
+        }
+        
+        .device-name {
+            font-weight: bold;
+            color: #ff5599;
+        }
+
+        .tagline {
+            font-weight: 500;
+            animation: color-change 4s infinite;
+        }
+
+        @keyframes color-change {
+            0% { color: #8865ff; }
+            50% { color: #ff5599; }
+            100% { color: #8865ff; }
+        }
+
+        .qr-code {
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px auto;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .qr-code img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .qr-instructions {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 10px 0;
+        }
+        
+        .url-info {
+            font-size: 12px;
+            word-break: break-all;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .header-icons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            margin-bottom: 5px;
+        }
+
+        .icon-btn img {
+            width: 24px;
+            height: 24px;
+            filter: invert(1);
+        }
+    </style>
+</head>
+<body>
+    <div class="header-icons">
+        <button class="icon-btn" id="ai-icon-btn">
+            <img src="assets/ai_icon.svg" alt="AI Chat">
+        </button>
+        <button class="icon-btn" id="settings-icon-btn">
+            <img src="assets/settings_icon.svg" alt="Settings">
+        </button>
+    </div>
+    <!-- Main view with send and receive buttons -->
+    <div class="container view" id="main-view">
+        <img src="assets/lightning.gif" alt="Lightning Bolt" class="logo pulse">
+        <h2>Bolt Transfer</h2>
+        <p class="tagline">Ultra Fast File Sharing</p>
+        
+        <div class="connection-info" id="connection-info">
+            Detecting network...
+        </div>
+        
+        <button class="btn btn-primary" id="send-button">Send Files</button>
+        <button class="btn" id="receive-button">Receive Files</button>
+    </div>
+    
+    <!-- Sending view -->
+    <div class="container view hidden" id="sending-view">
+        <img src="assets/lightning.gif" alt="Lightning Bolt" class="logo">
+        
+        <!-- QR Code Display -->
+        <div id="qr-code-container" class="hidden">
+            <div class="qr-instructions">Scan with mobile on the same Wi-Fi:</div>
+            <div class="qr-code">
+                <img id="qr-code-image" src="" alt="QR Code">
+            </div>
+            <div class="url-info" id="qr-url-text"></div>
+            <div class="url-info" id="qr-help-text" style="margin-top: 5px; font-size: 11px; color: rgba(255,255,255,0.6)">If QR doesn't work, try typing the address manually.</div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-text">Sending</div>
+            <div class="progress-subtext" id="sending-filename">Preparing files...</div>
+        </div>
+        <button class="back-button" id="send-cancel-button">Return to Home</button>
+    </div>
+    
+    <!-- Receiving view -->
+    <div class="container view hidden" id="receiving-view">
+        <img src="assets/lightning.gif" alt="Lightning Bolt" class="logo">
+        <div class="progress-container">
+            <div class="progress-text">Connected to <span class="device-name" id="connected-device">Device</span></div>
+            <div class="progress-subtext">Receiving</div>
+            <div class="progress-percentage" id="receive-percentage">0%</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="receive-progress-fill"></div>
+            </div>
+        </div>
+        <button class="back-button" id="receive-cancel-button">Cancel</button>
+    </div>
+
+    <script>
+        // Require electron's IPC renderer module to communicate with main process
+        const { ipcRenderer } = require('electron');
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Tranfer app loaded successfully!');
+            
+            // Get view elements
+            const mainView = document.getElementById('main-view');
+            const sendingView = document.getElementById('sending-view');
+            const receivingView = document.getElementById('receiving-view');
+            
+            // Get button elements
+            const sendButton = document.getElementById('send-button');
+            const receiveButton = document.getElementById('receive-button');
+            const sendCancelButton = document.getElementById('send-cancel-button');
+            const receiveCancelButton = document.getElementById('receive-cancel-button');
+            
+            // Get progress elements
+            const sendPercentage = document.getElementById('send-percentage');
+            const receivePercentage = document.getElementById('receive-percentage');
+            const sendProgressFill = document.getElementById('send-progress-fill');
+            const receiveProgressFill = document.getElementById('receive-progress-fill');
+            const sendingFilename = document.getElementById('sending-filename');
+            const connectedDevice = document.getElementById('connected-device');
+            const connectionInfo = document.getElementById('connection-info');
+            
+            // Get QR code elements
+            const qrCodeContainer = document.getElementById('qr-code-container');
+            const qrCodeImage = document.getElementById('qr-code-image');
+            const qrUrlText = document.getElementById('qr-url-text');
+
+            // Icon buttons
+            const aiButton = document.getElementById('ai-icon-btn');
+            const settingsButton = document.getElementById('settings-icon-btn');
+
+            aiButton.addEventListener('click', () => {
+                ipcRenderer.send('open-chatbot');
+            });
+
+            settingsButton.addEventListener('click', () => {
+                ipcRenderer.send('open-settings');
+            });
+            
+            // Get server information
+            ipcRenderer.invoke('get-server-info').then(info => {
+                connectionInfo.textContent = `Your IP: ${info.ip}:${info.port}`;
+            });
+            
+            // Function to show a specific view
+            function showView(viewElement) {
+                // Hide all views
+                mainView.classList.add('hidden');
+                sendingView.classList.add('hidden');
+                receivingView.classList.add('hidden');
+                
+                // Show the requested view
+                viewElement.classList.remove('hidden');
+            }
+            
+            // Send button click handler
+            sendButton.addEventListener('click', () => {
+                // Ask user to select files
+                ipcRenderer.send('select-files');
+            });
+            
+            // Receive button click handler
+            receiveButton.addEventListener('click', () => {
+                ipcRenderer.send('show-receive-page');
+            });
+            
+            // Cancel buttons click handlers
+            sendCancelButton.addEventListener('click', () => {
+                showView(mainView);
+                resetProgress();
+            });
+            
+            receiveCancelButton.addEventListener('click', () => {
+                showView(mainView);
+                resetProgress();
+            });
+            
+            // Reset progress UI
+            function resetProgress() {
+                sendingFilename.textContent = 'Preparing files...';
+                qrCodeContainer.classList.add('hidden');
+            }
+            
+            // Handle files selected event
+            ipcRenderer.on('files-selected', (event, data) => {
+                if (data.success && data.files.length > 0) {
+                    showView(sendingView);
+                    
+                    // Get the filename of the first selected file
+                    const firstFilename = data.files[0].split('\\').pop();
+                    const fileCount = data.files.length;
+                    
+                    // Show filename in UI
+                    if (fileCount > 1) {
+                        sendingFilename.textContent = `${firstFilename} and ${fileCount - 1} more file(s)`;
+                    } else {
+                        sendingFilename.textContent = firstFilename;
+                    }
+                    
+                    // Send files
+                    ipcRenderer.send('send-files', {
+                        files: data.files
+                    });
+                }
+            });
+            
+            // Handle QR code generated event
+            ipcRenderer.on('qr-code-generated', (event, data) => {
+                // Display QR code
+                qrCodeImage.src = data.qrCode;
+                qrUrlText.textContent = data.downloadUrl;
+                qrCodeContainer.classList.remove('hidden');
+                
+                // Update UI text
+                sendingFilename.textContent = `Ready to scan. ${data.files.length} file(s) prepared.`;
+            });
+            
+            // Handle send progress updates
+            ipcRenderer.on('send-progress-update', (event, data) => {
+                const percentage = Math.min(data.progress, 100);
+                
+                if (percentage === 100) {
+                    sendingFilename.textContent = 'Transfer complete!';
+                    setTimeout(() => {
+                        showView(mainView);
+                        resetProgress();
+                    }, 2000);
+                }
+            });
+            
+            // Handle download started event
+            ipcRenderer.on('download-started', (event, data) => {
+                sendingFilename.textContent = `Sending ${data.fileName}`;
+            });
+            
+            // Handle download complete event
+            ipcRenderer.on('download-complete', (event, data) => {
+                // This will be triggered when a mobile device completes downloading a file
+                sendingFilename.textContent = `${data.fileName} sent successfully!`;
+            });
+            
+            // Handle device connected event
+            ipcRenderer.on('device-connected', (event, data) => {
+                connectedDevice.textContent = data.name;
+            });
+            
+            // Handle file received event
+            ipcRenderer.on('file-received', (event, data) => {
+                // Update UI with received file info
+                receivePercentage.textContent = '100%';
+                receiveProgressFill.style.width = '100%';
+                
+                setTimeout(() => {
+                    showView(mainView);
+                    resetProgress();
+                }, 2000);
+            });
+            
+            // Handle transfer progress update
+            ipcRenderer.on('transfer-progress-update', (event, data) => {
+                const percentage = Math.min(data.progress, 100);
+                receivePercentage.textContent = `${percentage}%`;
+                receiveProgressFill.style.width = `${percentage}%`;
+            });
+        });
+    </script>
+</body>
+</html>

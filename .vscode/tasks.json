@@ -1,0 +1,54 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Start Tranfer App",
+			"type": "shell",
+			"command": "npm start",
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Start Tranfer App",
+			"type": "shell",
+			"command": "npm start",
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Start Tranfer App",
+			"type": "shell",
+			"command": "npm start",
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Start Tranfer App",
+			"type": "shell",
+			"command": "npm start",
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Start Tranfer App",
+			"type": "shell",
+			"command": "npm start",
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Start Tranfer App",
+			"type": "shell",
+			"command": "npm start",
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Start Tranfer App",
+			"type": "shell",
+			"command": "npm start",
+			"isBackground": false,
+			"group": "build"
+		}
+	]
+}

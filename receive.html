@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Receive Files</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1e1e2e;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            text-align: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 400px;
+        }
+        h1 {
+            color: #8865ff;
+        }
+        .qr-code {
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px auto;
+            width: 250px;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qr-code img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .url-info {
+            font-size: 14px;
+            word-break: break-all;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        .instructions {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 15px 0;
+        }
+        .status-message {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #00ffab; /* A success color */
+            min-height: 24px;
+            font-weight: bold;
+        }
+        .back-button {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 25px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .back-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Server Created</h1>
+        <p class="instructions">Scan the QR code with your mobile device to upload files.</p>
+        <div class="qr-code">
+            <img id="qr-code-image" src="" alt="QR Code">
+        </div>
+        <div class="url-info" id="qr-url-text"></div>
+        <div id="status-message" class="status-message"></div>
+        <button class="back-button" id="back-to-main">Return to Home</button>
+    </div>
+    <script src="receive.js"></script>
+</body>
+</html>

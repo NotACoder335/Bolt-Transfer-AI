@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload to Transfer</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #1e1e2e;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            color: #ff5599;
+            margin-top: 0;
+        }
+        p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .upload-form {
+            margin-top: 20px;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .file-label {
+            background-color: #8865ff;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-block;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .file-label:hover {
+            background-color: #7755ee;
+        }
+        #file-name {
+            margin-top: 15px;
+            color: rgba(255, 255, 255, 0.7);
+            font-style: italic;
+        }
+        .submit-btn {
+            background-color: #ff5599;
+            color: white;
+            border: none;
+            padding: 15px 0;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, opacity 0.3s;
+            width: 100%;
+            font-weight: bold;
+            margin-top: 20px;
+            opacity: 0.5;
+        }
+        .submit-btn:not(:disabled) {
+            opacity: 1;
+        }
+        .submit-btn:disabled {
+            cursor: not-allowed;
+        }
+        #status {
+            margin-top: 20px;
+            font-size: 16px;
+            min-height: 24px;
+        }
+        .success {
+            color: #00ffab;
+        }
+        .error {
+            color: #ff4d4d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload to Computer</h1>
+        <p>Select a file and click "Upload" to send it to the desktop app.</p>
+
+        <form id="upload-form" class="upload-form" action="/upload" method="post" enctype="multipart/form-data">
+            <label for="file-input" class="file-label">Choose File</label>
+            <input type="file" id="file-input" name="file" required>
+            <div id="file-name">No file selected</div>
+            <button type="submit" id="submit-button" class="submit-btn" disabled>Upload</button>
+        </form>
+
+        <div id="status"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('upload-form');
+        const fileInput = document.getElementById('file-input');
+        const fileNameDisplay = document.getElementById('file-name');
+        const submitButton = document.getElementById('submit-button');
+        const statusDisplay = document.getElementById('status');
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                fileNameDisplay.textContent = fileInput.files[0].name;
+                submitButton.disabled = false;
+            } else {
+                fileNameDisplay.textContent = 'No file selected';
+                submitButton.disabled = true;
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            statusDisplay.textContent = 'Uploading...';
+            statusDisplay.className = '';
+            submitButton.disabled = true;
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const result = await response.text();
+                    statusDisplay.textContent = 'File uploaded successfully!';
+                    statusDisplay.className = 'success';
+                    form.reset();
+                    fileNameDisplay.textContent = 'No file selected';
+                } else {
+                    throw new Error('Upload failed. Server responded with ' + response.status);
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                statusDisplay.textContent = 'Upload failed. Please try again.';
+                statusDisplay.className = 'error';
+            } finally {
+                 setTimeout(() => {
+                    submitButton.disabled = false;
+                    if(statusDisplay.className === 'success') {
+                        statusDisplay.textContent = '';
+                        statusDisplay.className = '';
+                    }
+                 }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
